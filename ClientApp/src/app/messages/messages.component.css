@@ -1,0 +1,294 @@
+/* src/app/messages/messages.component.css */
+
+/* Стилі для контейнера прокрутки */
+.messages-scroll-container {
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+    /* padding: 1rem; */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Контейнер для окремого повідомлення */
+.message-wrapper {
+    display: flex;
+    margin-bottom: 8px;
+    /* ✅ ДОДАНО: Резервуємо мінімальну висоту для запобігання зміщенню */
+    min-height: 50px;
+}
+
+/* Вирівнювання моїх повідомлень праворуч */
+.my-message-wrapper {
+    justify-content: flex-end;
+}
+
+/* Вирівнювання чужих повідомлень ліворуч */
+.other-message-wrapper {
+    justify-content: flex-start;
+}
+
+/* Стилі самої бульбашки повідомлення */
+.message-bubble {
+    border-radius: 15px;
+    padding: 8px 12px;
+    max-width: 75%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* ✅ ЗМІНЕНО: Використовуємо gap замість padding-bottom */
+    gap: 5px;
+    /* ✅ ДОДАНО: Запобігаємо колапсу margin */
+    contain: layout;
+}
+
+/* Стилі для бульбашки моїх повідомлень */
+.my-message-bubble {
+    background-color: #58C56F;
+    color: white;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+    align-items: flex-end;
+}
+
+/* Стилі для бульбашки чужих повідомлень */
+.other-message-bubble {
+    background-color: #e0e0e0;
+    color: #333;
+    align-items: flex-start;
+}
+
+/* Стилі для елементів всередині бульбашки */
+.message-username {
+    font-weight: bold;
+    display: block;
+    color: #264143;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: inherit;
+}
+
+.message-content {
+    font-size: 0.95em;
+    word-break: break-all;
+    text-align: inherit;
+}
+
+.edited-indicator {
+  font-size: 0.7em;
+  font-style: italic;
+  color: rgba(0, 80, 20, 0.7);
+  margin-right: 2px;
+}
+
+.other-message-bubble .edited-indicator {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+/* Стилі для статусу та кнопок дій */
+.message-info-and-actions, .message-actions-row {
+    /* Цей код більше не потрібен, оскільки його функціонал замінено. */
+    /* Залишаємо його, але він буде ігноруватися, якщо є більш специфічні правила. */
+}
+
+/* 🟢 Новий контейнер для кнопок та статусу */
+.message-actions-and-status {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    /* ✅ ЗМІНЕНО: Фіксована висота для запобігання CLS */
+    min-height: 20px;
+    margin-top: 0;
+}
+
+/* src/app/chat/chat.component.scss */
+
+/* Залишаємо базовий контейнер без змін, він вже виглядає добре */
+.reply-message-container {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    border-left: 4px solid #58C56F;
+    font-size: 0.9em;
+    max-width: 80%;
+    word-wrap: break-word;
+    /* ✅ ДОДАНО: Резервуємо мінімальну висоту */
+    min-height: 40px;
+}
+
+/* Стилі для контейнера "моїх" повідомлень, залишаємо без змін */
+.reply-message-container.my-message {
+  background-color: #e0f2e0;
+  border-left: 4px solid #4CAF50;
+}
+
+/* ✅ НОВІ СТИЛІ для контейнера імені та контенту */
+.reply-content-wrapper {
+  display: flex;
+  align-items: baseline;
+  background-color: #e9e9e9; /* Трохи темніший фон, ніж у основного контейнера */
+  padding: 4px 8px;
+  border-radius: 4px;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.reply-message-container.my-message .reply-content-wrapper {
+  background-color: #c8e6c9; /* Фон для "моїх" повідомлень */
+}
+
+/* ✅ ОНОВЛЕНО: Стиль для імені користувача */
+.reply-to-username {
+  font-weight: bold;
+  color: #333;
+  margin-right: 6px; /* Відступ між ім'ям і контентом */
+  flex-shrink: 0; /* Забороняємо стискатися */
+}
+
+/* ✅ ОНОВЛЕНО: Стиль для контенту */
+.reply-to-content {
+  color: #555;
+  font-style: italic;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; /* Не переносить текст на новий рядок */
+}
+
+/* 🟢 Стилі для контейнера кнопок */
+.message-actions {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.message-bubble:hover .message-actions {
+  opacity: 1;
+}
+
+/* 🟢 Стилі для кнопок, щоб вони були зеленими */
+.message-actions .btn-link {
+    color: #58C56F;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    /* ✅ ДОДАНО: Фіксовані розміри */
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.message-actions .btn-link:hover {
+    color: #4CAF50;
+}
+
+.message-actions .btn-link:active {
+    color: #45a049;
+}
+
+/* Стилі для статусу повідомлення */
+.message-status {
+  padding-right: 4px;
+  padding-bottom: 2px;
+}
+
+.second-dot {
+  margin-left: -2px;
+}
+
+.message-timestamp {
+  font-size: 0.7em;
+  margin-right: 3px;
+  white-space: nowrap;
+  color: rgba(0, 80, 20, 0.7);
+}
+
+.other-message-bubble .message-timestamp {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+/* Стилі для крапок статусу */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.dot-grey {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.dot-blue {
+    background-color: #007bff;
+}
+
+.dot-green {
+    background-color: #28a745;
+}
+
+.dot-yellow {
+    background-color: #ffc107;
+}
+
+/* ❌ Старі, конфліктні стилі, які були замінені */
+.my-message-bubble .message-status,
+.other-message-bubble .message-status {
+    position: static;
+}
+
+/* src/app/messages/messages.component.css */
+
+.message-image-container {
+    margin-bottom: 8px;
+    max-width: 100%;
+    /* ✅ ДОДАНО: Резервуємо простір для зображення */
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.message-image {
+    max-width: 100%;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    border-radius: 10px;
+    object-fit: contain;
+    display: block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* ✅ ДОДАНО: Запобігаємо CLS при завантаженні */
+    aspect-ratio: attr(width) / attr(height);
+}
+
+.message-image[src=""] {
+    min-height: 150px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Додайте ці стилі, щоб зображення виглядали по-різному для відправника і отримувача */
+.my-message-bubble .message-image {
+    /* Додаткові стилі для відправлених зображень, якщо потрібно */
+}
+
+.other-message-bubble .message-image {
+    /* Додаткові стилі для отриманих зображень, якщо потрібно */
+}

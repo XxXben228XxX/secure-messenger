@@ -1,0 +1,502 @@
+/* src/app/private-chat/private-chat.component.css */
+
+/* Залишаємо стилі для модального діалогу та контенту, які працювали раніше,
+   або спробуємо жорстко зафіксувати тут */
+.modal-dialog {
+  max-width: 600px; /* Або будь-яка бажана ширина */
+  width: 90%;
+  margin: 1.75rem auto;
+}
+
+.modal-content {
+  display: flex; /* Важливо для flexbox всередині */
+  flex-direction: column; /* Важливо для flexbox всередині */
+  height: 600px; /* Жорстко фіксуємо висоту всього модального вікна */
+  overflow: hidden; /* Щоб вміст не виходив за межі */
+}
+
+.modal-body {
+  flex-grow: 1; /* Дозволяє modal-body займати весь доступний простір */
+  display: flex;
+  flex-direction: column;
+  padding: 0; /* Прибираємо Bootstrap padding, якщо він заважає */
+  overflow: hidden; /* Приховуємо все, що виходить за межі modal-body */
+}
+
+.card {
+  display: flex; /* Робимо картку flex-контейнером */
+  flex-direction: column;
+  flex-grow: 1; /* Дозволяємо картці розтягуватися на всю висоту modal-body */
+  border: none;
+}
+
+.card-header {
+  flex-shrink: 0; /* Запобігає стисканню заголовка */
+  padding: 1rem;
+}
+
+/* ===== Ось основна зміна для фіксації висоти card-body ===== */
+.card-body {
+  flex-grow: 1;        /* ← замість height: 400px і flex-grow: 0 */
+  flex-shrink: 1;
+  overflow-y: auto;
+  padding: 0;
+  height: 0;           /* трюк для flex: без нього flex-grow ігнорує overflow */
+}
+
+/* Переконайтеся, що app-messages займає 100% висоти свого батьківського контейнера */
+app-messages {
+  height: 100%; /* app-messages буде займати всю фіксовану висоту card-body */
+  display: flex; /* Забезпечуємо flex-контейнер для внутрішнього вмісту */
+  flex-direction: column;
+}
+
+.card-footer {
+  flex-shrink: 0; /* Запобігає стисканню футера */
+  padding: 1rem;
+}
+
+/* src/app/messages/messages.component.css */
+
+/* Стилі для контейнера прокрутки */
+.messages-scroll-container {
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+}
+
+.message-wrapper {
+  display: flex;
+  margin-bottom: 8px;
+  padding-top: 0.4rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+.message-bubble {
+  border-radius: 15px;
+  padding: 8px 12px;
+  max-width: 75%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  position: relative; /* ВАЖЛИВО! */
+  padding-bottom: 4px; /* Забезпечуємо достатньо місця для статусу */
+}
+
+.message-actions-and-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  gap: 6px;
+}
+
+.message-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+
+/* кнопки показуємо тільки при наведенні */
+.message-bubble:hover .message-actions {
+  opacity: 1;
+}
+
+.message-status {
+  position: static; /* прибираємо absolute! */
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.message-timestamp {
+  font-size: 0.7em;
+  color: rgba(0, 60, 15, 0.55);
+  white-space: nowrap;
+}
+
+.other-message-bubble .message-timestamp {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.my-message-wrapper {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.my-message-bubble {
+  background-color: #58C56F;
+  color: white;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.other-message-wrapper {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.other-message-bubble {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.message-username {
+  font-weight: bold;
+  display: block;
+  color: #264143;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.message-content {
+  font-size: 0.95em;
+  word-break: break-all;
+}
+
+.message-status {
+  display: flex;
+  align-items: center;  /* крапки і час на одній лінії */
+  gap: 3px;
+  margin-left: auto;
+  padding-right: 4px;   /* відступ від краю */
+  padding-bottom: 2px;  /* трохи від низу */
+}
+
+.my-message-bubble .message-status {
+  left: auto;
+  right: 3px; /* Розташувати справа всередині бульбашки */
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  margin-top: 1px; /* компенсація оптичного зміщення */
+}
+
+.second-dot {
+  margin-left: -2px; /* крапки ближче одна до одної як в Telegram */
+}
+
+.edited-indicator {
+  font-size: 0.7em;
+  font-style: italic;
+  color: rgba(0, 60, 15, 0.55);
+  margin-right: 2px;
+}
+
+.other-message-bubble .edited-indicator {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.private-chat-messages-container {
+  max-height: none;    /* прибираємо обмеження */
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 15px;
+}
+.card-body.private-chat-messages-container.messages-scroll-container {
+  height: calc(600px - 130px); /* 600px висота модалки мінус header + footer */
+  overflow-y: auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.reply-message-container {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-left: 3px solid rgba(255, 255, 255, 0.6);
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin-bottom: 6px;
+  max-width: 100%;
+}
+
+.reply-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.reply-message-container {
+  cursor: pointer;
+}
+
+@keyframes highlight-fade {
+  0%   { background-color: rgba(123, 180, 236, 0.45); }  /* блакитне */
+  100% { background-color: transparent; }
+}
+
+.message-highlight {
+  animation: highlight-fade 1.5s ease-out forwards;
+  border-radius: 15px;
+}
+
+.reply-to-username {
+  font-size: 0.75em;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reply-to-content {
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+/* для чужих повідомлень (темний фон бульбашки) */
+.other-message-bubble .reply-message-container {
+  background-color: rgba(0, 0, 0, 0.08);
+  border-left-color: #7bb4ec;
+}
+
+.other-message-bubble .reply-to-username {
+  color: #264143;
+}
+
+.other-message-bubble .reply-to-content {
+  color: #555;
+}
+.dot-grey {
+  background-color: rgba(0, 0, 0, 0.4); /* Напівпрозорий сірий для "відправлено" / "доставлено" */
+}
+
+.dot-blue {
+  background-color: #007bff; /* Яскравий синій для "прочитано" */
+}
+
+.dot-green { /* Якщо ви хочете зелений для "прочитано" */
+  background-color: #28a745;
+}
+
+.dot-yellow { /* Для статусу помилки */
+  background-color: #ffc107;
+}
+
+.file-preview-container {
+    display: flex;
+    align-items: center;
+    background-color: #f0f2f5;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    max-width: 300px; /* Обмежте ширину контейнера */
+}
+
+.file-preview-image {
+    max-width: 100%; /* Гарантуємо, що зображення не вийде за межі контейнера */
+    max-height: 100px; /* ✅ Задаємо максимальну висоту */
+    object-fit: contain; /* Зберігаємо пропорції зображення */
+    border-radius: 5px;
+    margin-right: 8px;
+}
+
+.file-preview-wrapper {
+    display: flex;
+    align-items: center;
+    overflow: hidden; /* Обрізаємо вміст, якщо він виходить за межі */
+}
+
+.chat-image {
+    max-width: 100%; /* Гарантуємо, що зображення не вийде за межі баббла */
+    max-height: 200px; /* Обмежте висоту зображення в чаті */
+    border-radius: 8px;
+    object-fit: contain; /* Зберігаємо пропорції */
+    cursor: pointer; /* Вказуємо, що на зображення можна натиснути */
+    margin-top: 5px; /* Невеликий відступ від імені користувача */
+}
+
+/* Стилі для накладання імені файлу, якщо потрібно */
+.file-name-overlay {
+    display: block; /* Перетворюємо на блочний елемент, щоб ім'я файлу було під зображенням */
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 5px;
+    word-break: break-all; /* Дозволяємо переносити довгі імена файлів */
+}
+
+.chat-input {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}
+
+/* Забезпечуємо, щоб кнопки не мали гострих кутів на стику */
+.input-group-append {
+  display: flex; /* Важливо для вирівнювання кнопок */
+}
+
+.input-group-append .btn {
+  /* Забезпечуємо відсутність border-radius на внутрішніх стиках */
+  border-radius: 0;
+}
+
+/* Заокруглюємо зовнішні кути кнопок */
+.input-group-append .animated-button-container {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  /* Додатково: прибираємо margin, якщо він є */
+  margin-left: 0;
+}
+
+.input-group-append .btn-primary {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.animated-button-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  width: 100px;
+  overflow: hidden;
+  color: white;
+  background-color: #374151;
+  /* ✅ Ось ключова зміна: закруглюємо кути */
+  border-radius: 6px; 
+  cursor: pointer;
+  border: none;
+}
+
+.animated-button-container .background-circle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  transition: all 0.5s ease-out;
+  background-color: #ea580c; /* bg-orange-600 */
+  border-radius: 9999px; /* rounded-full */
+}
+
+.animated-button-container:hover .background-circle {
+  width: 224px; /* w-56 (56 * 4px) */
+  height: 224px; /* h-56 (56 * 4px) */
+}
+
+.animated-button-container .wave-left,
+.animated-button-container .wave-right {
+  position: absolute;
+}
+
+.animated-button-container .wave-left {
+  bottom: 0;
+  left: 0;
+  height: 100%;
+  margin-left: -8px; /* -ml-2 */
+}
+
+.animated-button-container .wave-right {
+  top: 0;
+  right: 0;
+  width: 48px; /* w-12 (12 * 4px) */
+  height: 100%;
+  margin-right: -12px; /* -mr-3 */
+}
+
+.animated-button-container .gradient-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin-top: -4px;
+  /* ✅ Застосовуємо те ж закруглення до оверлею */
+  border-radius: 6px; 
+  opacity: 0.3;
+  background: linear-gradient(to bottom, transparent, transparent, #e5e7eb);
+}
+
+.animated-button-container .button-text {
+  position: relative;
+  font-size: 0.875rem; /* ✅ Зменшуємо розмір шрифту, щоб він відповідав кнопці Send */
+  font-weight: 600;
+  z-index: 10;
+}
+
+.input-group-append .btn-primary {
+  /* Ці стилі дозволять кнопці "Send" мати такий самий розмір */
+  height: 38px; /* ✅ Збігається з висотою анімованої кнопки */
+  width: 100px; /* ✅ Збігається з шириною анімованої кнопки */
+  font-size: 0.875rem; /* ✅ Збігається з розміром шрифту анімованої кнопки */
+}
+
+/* Custom styles for the Send button */
+.send-button {
+  height: 38px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 123, 255, 0.8) 0%,
+    rgba(40, 167, 255, 0.6) 100%
+  );
+  border: 2px solid #007bff;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  /* ✅ Заокруглюємо правий бік кнопки */
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  z-index: 2;
+}
+
+.send-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2); /* Напівпрозорий чорний шар */
+  opacity: 0; /* Початкова прозорість - 0 */
+  transition: opacity 0.3s ease; /* Плавний перехід */
+  /* ✅ Встановлюємо z-index менше, ніж у кнопки, щоб він був під текстом */
+  z-index: -1; 
+}
+
+.send-button:hover::before {
+  opacity: 1; /* ✅ При наведенні курсору робимо затемнення видимим */
+}
+
+.send-button span {
+  position: relative;
+  z-index: 2; /* Гарантує, що текст буде поверх затемненого шару */
+}
+
+.send-button:after {
+  content: "";
+  position: absolute;
+  left: -1px; /* Adjusted position */
+  bottom: -1px; /* Adjusted position */
+  border-top: 10px solid transparent; /* Adjusted size */
+  border-left: 10px solid #fffcf7; /* Adjusted size */
+}
+
+.form-control {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+}

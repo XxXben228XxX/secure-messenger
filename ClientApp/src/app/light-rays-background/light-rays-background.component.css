@@ -1,0 +1,28 @@
+/* src/app/light-rays-background/light-rays-background.component.css */
+:host {
+  /* Важливо: :host стилізує сам компонент.
+     Забезпечте, що компонент займає потрібний простір і позиціонований абсолютно. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Переконайтеся, що він під вмістом */
+  overflow: hidden;
+}
+
+.light-rays-container {
+  width: 100%;
+  height: 100%;
+  position: relative; /* Це для контейнера, в який буде додано Canvas */
+  pointer-events: none; /* Забезпечує, що кліки проходять крізь фон */
+  z-index: 3; /* Змініть, якщо потрібно. Пам'ятайте про z-index 0 на :host */
+  overflow: hidden;
+}
+
+/* Якщо вам потрібні стилі для canvas, додайте їх тут */
+.light-rays-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

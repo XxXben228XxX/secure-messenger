@@ -1,0 +1,151 @@
+<div class="modal-header">
+    <h4 class="modal-title">{{toUser}}</h4>
+    <button type="button" class="btn-close" (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+<div class="modal-body">
+    <div class="card border-secondary">
+        <div class="card-header h3 text-muted text-center">Messages</div>
+        <div class="card-body private-chat-messages-container messages-scroll-container">
+            
+            <div *ngFor="let message of privateMessages$ | async; trackBy: trackByMessageId" #messageElement
+                [attr.data-messageid]="message.id" class="message-wrapper"
+                [ngClass]="{'my-message-wrapper': message.isMyMessage, 'other-message-wrapper': !message.isMyMessage}">
+
+                <div class="message-bubble"
+                    [ngClass]="{'my-message-bubble': message.isMyMessage, 'other-message-bubble': !message.isMyMessage}">
+
+                    <ng-container *ngIf="message.isMyMessage && editingMessageId === message.id">
+                        <textarea [(ngModel)]="editingMessageContent" class="form-control edit-textarea"></textarea>
+                        <div class="edit-actions mt-2 d-flex justify-content-end">
+                            <button (click)="saveEditedMessage(message)" class="btn btn-success btn-sm me-2">Зберегти</button>
+                            <button (click)="cancelEdit()" class="btn btn-secondary btn-sm">Скасувати</button>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="editingMessageId !== message.id">
+                        
+                        <div *ngIf="getParentMessage(message) as parentMessage" class="reply-message-container"
+                            [ngClass]="{'my-message': parentMessage.from === chatService.myName}"
+                            (click)="scrollToMessage(parentMessage.id)">
+                            <div class="reply-content-wrapper">
+                                <span class="reply-to-username">{{ parentMessage.from }}:</span>
+                                <span class="reply-to-content">{{ parentMessage.content }}</span>
+                            </div>
+                        </div>
+
+                        <div class="message-container">
+                            <div class="message-header" *ngIf="!message.isMyMessage">
+                                <span class="message-username">{{ message.from }}: </span> 
+                            </div>
+
+                            <div class="message-body">
+                                <ng-container *ngIf="message.isFile; else textMessageContent">
+                                    <ng-container *ngIf="isImage(message); else fileLink">
+                                        <a href="#" (click)="downloadFile(message); $event.preventDefault();" [title]="message.fileName">
+                                            <img [src]="message.fileUrl" class="chat-image" alt="File: {{ message.fileName }}">
+                                        </a>
+                                        <span class="file-name-overlay">{{ message.fileName }}</span>
+                                    </ng-container>
+                                    
+                                    <ng-template #fileLink>
+                                        <i class="bi bi-file-earmark-fill file-icon"></i>
+                                        <a href="#" (click)="downloadFile(message); $event.preventDefault();" [title]="message.fileName">
+                                            {{ message.fileName }} <i class="bi bi-download"></i>
+                                        </a>
+                                    </ng-template>
+                                </ng-container>
+                                <ng-template #textMessageContent>
+                                    <span class="message-content">{{ message.content }}</span>
+                                </ng-template>
+                            </div>
+                        </div>
+
+                        <div class="message-actions-and-status">
+                            <div class="message-actions">
+                                <button (click)="replyToMessage(message)" class="reply-button btn btn-link btn-sm p-0">
+                                    ↩️
+                                </button>
+                                <ng-container *ngIf="message.from === chatService.myName">
+                                    <button (click)="startEditMessage(message)" class="edit-button btn btn-link btn-sm p-0">
+                                        ✏️
+                                    </button>
+                                    <button (click)="confirmDeleteMessage(message.id)" class="delete-button btn btn-link btn-sm p-0">
+                                        🗑️
+                                    </button>
+                                </ng-container>
+                            </div>
+                            <div class="message-status">
+                                <span *ngIf="message.edited" class="edited-indicator">edited</span>
+                                <span class="message-timestamp">{{ message.timestamp | date:'shortTime' }}</span>
+                                <ng-container *ngIf="message.from === chatService.myName" [ngSwitch]="message.status">
+                                    <span class="status-dot dot-grey" *ngSwitchCase="'sent'"></span>
+                                    <ng-container *ngSwitchCase="'delivered'">
+                                    <span class="status-dot dot-grey"></span>
+                                    <span class="status-dot second-dot dot-grey"></span>
+                                    </ng-container>
+                                    <ng-container *ngSwitchCase="'read'">
+                                    <span class="status-dot dot-blue"></span>
+                                    <span class="status-dot second-dot dot-blue"></span>
+                                    </ng-container>
+                                    <span *ngSwitchDefault></span>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <div *ngIf="replyingToMessage" class="reply-preview">
+                <span class="reply-preview-text">Reply: {{ replyingToMessage.from }}: </span>
+                <span class="reply-preview-content">{{ replyingToMessage.content }}</span>
+                <button (click)="cancelReply()" class="cancel-reply-button">x</button>
+            </div>
+
+            <div *ngIf="selectedFileName" class="file-preview-container mb-2">
+                <div class="file-preview-wrapper">
+                    <ng-container *ngIf="previewUrl">
+                        <img [src]="previewUrl" class="file-preview-image">
+                    </ng-container>
+                    
+                    <ng-container *ngIf="!previewUrl">
+                        <i class="bi bi-file-earmark-fill me-2"></i>
+                        <span>{{ selectedFileName }}</span>
+                    </ng-container>
+                    
+                    <button type="button" class="btn-close ms-2" (click)="cancelFileSelection()"></button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Write a message..."
+                    [(ngModel)]="newMessageContent" (keyup.enter)="sendNewMessage()">
+
+                <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
+
+                <div class="input-group-append">
+                    
+                    <button class="animated-button-container" (click)="fileInput.click()">
+                        <span class="background-circle"></span>
+                        <span class="wave-left">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-auto h-full opacity-100 object-stretch" viewBox="0 0 487 487">
+                                <path fill-opacity=".1" fill-rule="nonzero" fill="#FFF" d="M0 .3c67 2.1 134.1 4.3 186.3 37 52.2 32.7 89.6 95.8 112.8 150.6 23.2 54.8 32.3 101.4 61.2 149.9 28.9 48.4 77.7 98.8 126.4 149.2H0V.3z"></path>
+                            </svg>
+                        </span>
+                        <span class="wave-right">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="object-cover w-full h-full" viewBox="0 0 487 487">
+                                <path fill-opacity=".1" fill-rule="nonzero" fill="#FFF" d="M487 486.7c-66.1-3.6-132.3-7.3-186.3-37s-95.9-85.3-126.2-137.2c-30.4-51.8-49.3-99.9-76.5-151.4C70.9 109.6 35.6 54.8.3 0H487v486.7z"></path>
+                            </svg>
+                        </span>
+                        <span class="gradient-overlay"></span>
+                        <span class="button-text"><i class="bi bi-paperclip"></i> Attach file</span>
+                    </button>
+
+                    <button class="send-button" type="button" (click)="sendNewMessage()">Send</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

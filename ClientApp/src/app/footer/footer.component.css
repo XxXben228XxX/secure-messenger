@@ -1,0 +1,136 @@
+/* footer.component.css */
+
+.app-footer {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 0.9em;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  
+  /* ✅ Додайте transition для трансформації */
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease, backdrop-filter 0.3s ease;
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.app-footer.collapsed {
+  transform: translateY(calc(100% - 20px)); /* Згортаємо, залишаючи видимою лише невелику частину */
+}
+
+.app-footer.transparent-footer {
+  background-color: rgba(0, 0, 0, 0); /* Повністю прозорий фон */
+  color: transparent; /* Робить текст прозорим */
+}
+
+.app-footer:hover,
+.app-footer.transparent-footer:hover {
+  background-color: rgba(0, 0, 0, 0.6); /* Відновлює нормальний фон */
+  color: #fff; /* Відновлює нормальний колір тексту */
+}
+
+.app-footer .footer-links a,
+.app-footer .social-icons a,
+.app-footer .copyright-text,
+.app-footer .version-info {
+  /* Важливо! Додайте перехід і для цих елементів,
+     щоб вони плавно змінювали колір разом з фоном. */
+  transition: color 0.3s ease;
+}
+
+/* Стилі для посилань та тексту, коли футер прозорий */
+.app-footer.transparent-footer .footer-links a,
+.app-footer.transparent-footer .social-icons a,
+.app-footer.transparent-footer .copyright-text,
+.app-footer.transparent-footer .version-info {
+  color: transparent; /* Робить текст та іконки прозорими */
+}
+/* Якщо ви використовуєте container-fluid, цей блок можна видалити або змінити: */
+.app-footer .container-fluid { /* Змінено з .container */
+  /* max-width: 960px;  ВИДАЛИТИ АБО ЗАКОМЕНТУВАТИ ЦЕЙ РЯДОК */
+  /* margin: 0 auto;  Можна залишити, якщо потрібне центрування вмісту */
+  /* padding: 0 15px;  Цей padding є стандартним для Bootstrap, можна залишити */
+}
+
+/* Решта ваших стилів */
+.app-footer .footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-footer .footer-links a,
+.app-footer .social-icons a {
+  color: #c0c0c0;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  margin: 0 5px;
+}
+
+.app-footer .footer-links a:hover,
+.app-footer .social-icons a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.app-footer .social-icons .fab,
+.app-footer .social-icons .fas {
+  font-size: 1.3em;
+}
+
+.app-footer .copyright-text,
+.app-footer .version-info {
+  color: #888;
+  margin-top: 5px;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+.app-footer .text-danger {
+    color: #dc3545 !important;
+    text-decoration: none;
+}
+
+.app-footer .text-danger:hover {
+    text-decoration: underline;
+}
+
+/* footer.component.css */
+
+.app-footer .copyright-text,
+.app-footer .version-info {
+  color: #c0c0c0; /* ✅ Світло-сірий колір для кращої видимості */
+  margin-top: 5px;
+  margin-bottom: 0;
+  line-height: 1.2;
+}
+
+/* Оновлений стиль для посилання всередині тексту */
+.app-footer .text-danger {
+  color: #dc3545 !important;
+  text-decoration: none;
+}
+
+.app-footer .text-danger:hover {
+  text-decoration: underline;
+}
+
+/* ✅ Додаткові стилі для "прозорого" стану */
+.app-footer.transparent-footer .copyright-text,
+.app-footer.transparent-footer .version-info {
+  /* Ми не робимо їх повністю прозорими, а лише трохи зменшуємо прозорість,
+     щоб вони були ледь помітні. */
+  color: rgba(192, 192, 192, 0.4); /* Напівпрозорий світло-сірий */
+}
+
+/* ✅ При наведенні ми повертаємо нормальний колір */
+.app-footer:hover .copyright-text,
+.app-footer:hover .version-info {
+  color: #c0c0c0; /* Повертаємо світло-сірий */
+}

@@ -1,0 +1,33 @@
+<footer
+  class="app-footer border-top border-dark"
+  [class.transparent-footer]="!isAtBottom"
+  [ngClass]="{'collapsed': isCollapsed}"
+  (dblclick)="toggleCollapse()"
+>
+  <div class="container-fluid text-center py-3">
+    <div class="footer-content">
+      <div class="footer-links mb-2">
+        <a routerLink="/privacy-policy" fragment="privacy-policy" class="text-muted footer-link">Privacy Policy</a>
+        <span class="text-muted mx-2">|</span>
+        <a routerLink="/terms-of-service" fragment="terms-of-service" class="text-muted footer-link">Terms of Service</a>
+        <span class="text-muted mx-2">|</span>
+        <a routerLink="/about" fragment="about" class="text-muted footer-link">About Us</a>
+        <span class="text-muted mx-2">|</span>
+        <a routerLink="/contact" fragment="contact" class="text-muted footer-link">Contact Us</a>
+        <span class="text-muted mx-2">|</span>
+        <a routerLink="/faq" fragment="faq" class="text-muted footer-link">FAQ</a>
+      </div>
+
+      <div class="social-icons mb-2">
+        <a href="https://twitter.com/your_handle" target="_blank" class="text-muted social-icon me-3"><i class="fab fa-twitter"></i></a>
+        <a href="https://facebook.com/your_page" target="_blank" class="text-muted social-icon me-3"><i class="fab fa-facebook"></i></a>
+        <a href="https://linkedin.com/in/your_profile" target="_blank" class="text-muted social-icon me-3"><i class="fab fa-linkedin"></i></a>
+        <a href="https://discord.gg/your_invite" target="_blank" class="text-muted social-icon me-3"><i class="fab fa-discord"></i></a>
+        <a href="mailto:support@chat.com" class="text-muted social-icon"><i class="fas fa-envelope"></i></a>
+      </div>
+
+      <h6 class="copyright-text">Copyright &copy; 2025-{{ currentYear }} <a href="#" class="text-danger">Chat</a></h6>
+      <p class="version-info text-muted mb-0">Version 1.0.0</p>
+    </div>
+  </div>
+</footer>

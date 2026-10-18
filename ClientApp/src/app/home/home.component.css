@@ -1,0 +1,282 @@
+/* src/app/home/home.component.css */
+
+/* Загальні стилі для обгортки */
+.infinite-scroll-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden; /* Дуже важливо для нескінченного прокручування */
+    overscroll-behavior: none;
+    /* Висота для демонстрації, можливо, потрібно буде налаштувати */
+    height: 500px; /* Або будь-яка інша висота, яку ти хочеш для прокрутки */
+    perspective: 1000px; /* Для 3D трансформацій */
+}
+
+/* Градієнтні "маски" зверху та знизу */
+.infinite-scroll-wrapper::before,
+.infinite-scroll-wrapper::after {
+    content: "";
+    position: absolute;
+    /* Колір 060010 здається неправильним для CSS. Це може бути HEX #060010 або помилка.
+       Я припускаю, що це було #000000 або інший темний колір.
+       Якщо хочеш прозорий чорний, спробуй rgba(0, 0, 0, 0.6) */
+    background: linear-gradient(var(--dir, to bottom), rgba(0, 0, 0, 0.6), transparent);
+    height: 25%;
+    width: 100%;
+    z-index: 1;
+    pointer-events: none; /* Дозволяє клікам проходити крізь градієнт */
+}
+
+.infinite-scroll-wrapper::before {
+    top: 0;
+}
+
+.infinite-scroll-wrapper::after {
+    --dir: to top;
+    bottom: 0;
+}
+
+/* Контейнер для елементів, які прокручуються */
+.infinite-scroll-container {
+    display: flex;
+    flex-direction: column;
+    overscroll-behavior: contain;
+    padding-inline: 1rem;
+    cursor: grab;
+    transform-style: preserve-3d; /* Важливо для 3D трансформацій елементів всередині */
+    transform-origin: center center;
+    width: 30rem; /* Ширина з React-прикладу */
+    position: absolute; /* Позиціонування для анімації */
+}
+
+/* Кожен окремий елемент у прокручуванні */
+.infinite-scroll-item {
+    --accent-color: #ffffff; /* Акцентний колір для рамки та тексту */
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    border: 2px solid var(--accent-color);
+    user-select: none;
+    box-sizing: border-box;
+    position: relative;
+    color: var(--accent-color); /* Колір тексту */
+    background-color: rgba(255, 255, 255, 0.05); /* Легкий фон для видимості */
+    margin-top: -0.5em; /* Негативний відступ, щоб елементи були ближче */
+    min-height: 150px; /* Мінімальна висота з React-прикладу */
+    flex-shrink: 0; /* Щоб елементи не зменшувалися */
+}
+
+/* Додаткові стилі для "нахилу" (якщо ти захочеш це реалізувати за допомогою CSS) */
+/* Для "нахилу" (tilt) тобі потрібно буде додати клас до .infinite-scroll-container
+   і застосувати transform. Наприклад:
+.infinite-scroll-container.is-tilted-left {
+    transform: rotateX(20deg) rotateZ(-20deg) skewX(20deg);
+}
+.infinite-scroll-container.is-tilted-right {
+    transform: rotateX(20deg) rotateZ(20deg) skewX(-20deg);
+}
+*/
+/* Додаємо стилі з Uiverse.io */
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+/* src/app/home/home.component.css */
+
+.form_area {
+  display: flex;
+  padding: 30px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.05); /* Напівпрозорий фон */
+  height: auto;
+  width: auto;
+  border: 2px solid #4CAF50;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.4), 0 0 25px rgba(0, 255, 255, 0.2);
+
+  /* ✅ НОВІ СТИЛІ ДЛЯ ЕФЕКТУ "ЗАТЕМНЕНОГО СКЛА" */
+  backdrop-filter: blur(10px) brightness(0.8);
+  -webkit-backdrop-filter: blur(10px) brightness(0.8);
+}
+
+.title {
+  color: #f0f0f0; /* ✅ Світлий колір для заголовка */
+  font-weight: 900;
+  font-size: 1.5em;
+  margin-top: 20px;
+}
+
+.sub_title {
+  font-weight: 600;
+  margin: 5px 0;
+  color: #c0c0c0; /* ✅ Світло-сірий для підзаголовків */
+}
+
+.form_group {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  margin: 10px; /* Залишаємо базовий margin 10px */
+  margin-bottom: 0px; /* Спробуємо зменшити цей відступ, або повністю прибрати,
+                          і керувати простором через .error-message */
+}
+
+.form_style {
+  outline: none;
+  border: 2px solid #4CAF50; /* Зелена рамка */
+  background-color: rgba(255, 255, 255, 0.05); /* ✅ Напівпрозорий фон */
+  color: #f0f0f0; /* Світлий текст в інпуті */
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3), 0 0 15px rgba(0, 255, 255, 0.1); /* Неонова тінь */
+  width: 290px;
+  padding: 12px 10px;
+  border-radius: 4px;
+  font-size: 15px;
+
+  /* ✅ НОВІ СТИЛІ ДЛЯ ЕФЕКТУ "ЗАТЕМНЕНОГО СКЛА" */
+  backdrop-filter: blur(100px) brightness(0.8); /* Розмиття та затемнення */
+  -webkit-backdrop-filter: blur(10px) brightness(0.8); /* Префікс для Safari */
+}
+
+.form_style:focus {
+  transform: translateY(0);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 30px rgba(0, 255, 255, 0.3);
+}
+
+.form_style:focus, .btn:focus {
+  transform: translateY(4px);
+  box-shadow: 1px 2px 0px 0px #E99F4C;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; /* Повинно бути вище за інші елементи */
+}
+
+.form_area .btn {
+  padding: 15px !important;
+  margin: 20px 0px 10px 0px !important;
+  width: 290px !important;
+  font-size: 15px !important;
+  background-color: #58C56F !important; /* ✅ Ваш основний зелений колір */
+  border-radius: 10px !important;
+  font-weight: 800 !important;
+  color: #fff !important;
+  border: 2px solid #333 !important; /* Темніша рамка для контрасту */
+  outline: none !important;
+  box-shadow: 0 0 15px rgba(88, 197, 111, 0.6), 0 0 25px rgba(88, 197, 111, 0.4) !important; /* ✅ Неонова тінь у колір кнопки */
+}
+
+.form_area .btn:hover {
+  background-color: #4CAF50 !important;
+  box-shadow: 0 0 20px rgba(88, 197, 111, 0.8), 0 0 30px rgba(88, 197, 111, 0.6) !important;
+}
+
+.form_area .btn:active {
+  transform: translateY(2px) !important; /* Легке натискання */
+  box-shadow: 0 0 10px rgba(88, 197, 111, 0.4), 0 0 15px rgba(88, 197, 111, 0.2) !important;
+}
+
+.form_area .btn:focus {
+  transform: translateY(4px) !important;
+  box-shadow: 1px 2px 0px 0px #E99F4C !important;
+}
+
+.error-message {
+  margin-top: 5px; /* Повернемо до 5px або навіть 8px, щоб не налазило на поле вводу */
+  padding-bottom: 0px; /* Приберемо padding-bottom, щоб зменшити зайвий простір */
+  display: block;
+  /* min-height буде встановлюватися динамічно в .visible-error */
+  line-height: 1.2em; /* Адекватний міжрядковий інтервал */
+  color: red;
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  max-width: 290px;
+}
+
+.api-errors-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.api-errors-container li {
+  color: #ff6666; /* ✅ Більш яскравий червоний для API помилок */
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+/* Якщо помилка прихована, ми не хочемо, щоб вона займала повну min-height.
+   Можна скинути min-height або використовувати height: 0. */
+.hidden-error {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.2s, opacity 0.2s linear;
+  height: 0; /* Використаємо height: 0, щоб повністю схлопнути елемент */
+  overflow: hidden; /* Важливо, щоб прихований текст не впливав на макет */
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Клас, коли помилка видима */
+.visible-error {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.2s linear;
+  /* Встановлюємо достатню висоту для двох рядків,
+     або використовуємо auto, якщо height: 0 у прихованому стані */
+  height: auto; /* Дозволяє елементу займати свою фактичну висоту */
+  min-height: 2.4em; /* Приблизно висота двох рядків (1.2em * 2) */
+  margin-top: 5px; /* Повертаємо відступ, коли повідомлення видиме */
+  margin-bottom: 5px; /* Додаємо відступ знизу, щоб відсунути кнопку Submit */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Стилі для API помилок (ul) */
+.api-errors-container {
+  margin-top: 10px; /* Залишаємо або зменшуємо за потреби */
+  margin-bottom: 10px; /* Можливо, теж можна зменшити */
+}
+
+.link {
+  font-weight: 800;
+  color: #264143;
+  padding: 5px;
+}
+
+.text-center h1 {
+  color: #f0f0f0; /* ✅ Світлий колір для заголовків сторінки */
+}
+
+.text-danger {
+  color: #ff6666 !important;
+}
+
+.text-info {
+  color: #0077ff !important; /* ✅ Колір, що світиться */
+}

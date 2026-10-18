@@ -1,0 +1,68 @@
+<ng-container *ngIf="!openChat">
+  <div class="text-center">
+    <h1>Let's get you connected and <span class="text-danger">chat</span> with other
+      <span class="text-info">people</span>
+    </h1>
+  </div>
+
+  <div class="container">
+    <div class="form_area">
+      <form [formGroup]="userForm" (ngSubmit)="submitForm()" autocomplete="off" class="p-3">
+        <p class="title">Choose your name</p>
+        <div class="form_group">
+          <label class="sub_title" for="username">Username</label>
+          <input formControlName="username" type="text" class="form_style" placeholder="Username"
+                 [class.is-invalid]="submitted && userForm.get('username')?.errors">
+          <span class="text-danger error-message"
+                [class.visible-error]="submitted && userForm.get('username')?.hasError('required')"
+                [class.hidden-error]="!(submitted && userForm.get('username')?.hasError('required'))">
+            Please choose a username
+          </span>
+          <span class="text-danger error-message"
+                [class.visible-error]="submitted && (userForm.get('username')?.hasError('maxlength') || userForm.get('username')?.hasError('minlength'))"
+                [class.hidden-error]="!(submitted && (userForm.get('username')?.hasError('maxlength') || userForm.get('username')?.hasError('minlength')))">
+            Your username must be at least 3, and maximum 15 characters
+          </span>
+        </div>
+
+        <div class="form_group">
+          <label class="sub_title" for="password">Password</label>
+          <input formControlName="password" type="password" class="form_style" placeholder="Password"
+                 [class.is-invalid]="submitted && userForm.get('password')?.errors">
+          <span class="text-danger error-message"
+                [class.visible-error]="submitted && userForm.get('password')?.hasError('required')"
+                [class.hidden-error]="!(submitted && userForm.get('password')?.hasError('required'))">
+            Please choose a password
+          </span>
+          <span class="text-danger error-message"
+                [class.visible-error]="submitted && (userForm.get('password')?.hasError('maxlength') || userForm.get('password')?.hasError('minlength'))"
+                [class.hidden-error]="!(submitted && (userForm.get('password')?.hasError('maxlength') || userForm.get('password')?.hasError('minlength')))">
+            Your password must be at least 6, and maximum 20 characters
+          </span>
+        </div>
+
+        <div class="form-floating api-errors-container" *ngIf="apiErrorMessages.length > 0">
+          <ul class="text-danger">
+            <li *ngFor="let error of apiErrorMessages">
+              {{error}}
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <button class="btn" type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="openChat">
+  <app-chat (closeChatEmitter)="closeChat()"></app-chat>
+</ng-container>
+
+<div *ngIf="isLoading" class="loading-overlay">
+  <div class="spinner-border text-info" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>

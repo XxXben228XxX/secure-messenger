@@ -1,0 +1,15 @@
+<div class="infinite-scroll-wrapper" [style.maxHeight]="maxHeight">
+    <div
+        class="infinite-scroll-container"
+        [style.width]="width"
+        [style.transform]="getTiltTransform()"
+    >
+        <div
+            *ngFor="let item of items; let i = index;"
+            class="infinite-scroll-item"
+            #scrollItem
+        >
+            {{item.content}}
+        </div>
+    </div>
+</div>

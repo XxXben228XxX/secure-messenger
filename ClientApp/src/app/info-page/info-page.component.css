@@ -1,0 +1,77 @@
+/* src/app/info-page/info-page.component.css */
+
+.info-page-container {
+  /* background-color: #060010; */
+  color: #f0f0f0;
+  min-height: 100vh;
+  padding-top: 50px;
+  overflow-y: auto;
+  padding-bottom: 100px;
+  position: relative;
+  min-height: 100vh;
+}
+
+.info-title {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+/* ✅ ОНОВЛЕНІ СТИЛІ КАРТОК */
+.info-card {
+  padding: 20px;
+  width: 100%; /* Робимо ширину адаптивною */
+  min-height: auto;
+  border-radius: 20px;
+  background: #212121; /* Дуже темний фон */
+  box-shadow: 5px 5px 8px #1b1b1b,
+              -5px -5px 8px #272727;
+  transition: 0.4s;
+  margin-bottom: 40px; /* Додаємо відступ між картками */
+}
+
+.info-card:hover {
+  translate: 0 -10px;
+}
+
+.card-content {
+  /* Якщо потрібно, можна додати стилі для внутрішнього контейнера */
+}
+
+.card-title {
+  font-size: 24px; /* Збільшимо розмір заголовка */
+  font-weight: 600;
+  color: #b2eccf; /* Світлий зеленуватий */
+  margin: 15px 0 0 10px;
+}
+
+.card-body {
+  margin: 13px 0 0 10px;
+  color: rgb(184, 184, 184); /* Світло-сірий для основного тексту */
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* Перевизначення існуючих класів для інтеграції */
+.section-title {
+  color: #b2eccf; /* ✅ Адаптуємо колір до нової палітри */
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.question {
+  color: #b2eccf; /* ✅ Адаптуємо колір до нової палітри */
+  font-weight: 600;
+}
+
+.answer {
+  color: rgb(184, 184, 184); /* ✅ Адаптуємо колір до нової палітри */
+}
+
+a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

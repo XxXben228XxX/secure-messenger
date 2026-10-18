@@ -1,0 +1,94 @@
+<div class="messages-scroll-container">
+    <div *ngFor="let message of messages; trackBy: trackByMessageId" #messageElement [attr.data-messageid]="message.id"
+        class="message-wrapper"
+        [ngClass]="{'my-message-wrapper': message.from === currentUser, 'other-message-wrapper': message.from !== currentUser}">
+
+        <div class="message-bubble"
+            [ngClass]="{'my-message-bubble': message.from === currentUser, 'other-message-bubble': message.from !== currentUser}">
+
+            <div *ngIf="getParentMessage(message) as parentMessage"
+                class="reply-message-container"
+                [ngClass]="{'my-message': parentMessage.from === currentUser}"
+                (click)="scrollToMessage(parentMessage.id)"> <div class="reply-content-wrapper">
+                    <span class="reply-to-username">{{ parentMessage.from }}:</span>
+                    <span class="reply-to-content">{{ decodeMessageContent(parentMessage) }}</span>
+                </div>
+            </div>
+
+            <ng-container *ngIf="editingMessageId === message.id && message.from === currentUser; else displayMessage">
+                <textarea [(ngModel)]="editingMessageContent" class="form-control edit-textarea"></textarea>
+                <div class="edit-actions mt-2 d-flex justify-content-end">
+                    <button (click)="saveEditedMessage(message)" class="btn btn-success btn-sm me-2">Зберегти</button>
+                    <button (click)="cancelEdit()" class="btn btn-secondary btn-sm">Скасувати</button>
+                </div>
+            </ng-container>
+
+            <ng-template #displayMessage>
+                <div class="message-container">
+                    <div class="message-header">
+                        <span class="message-username">{{ message.from }}: </span>
+                    </div>
+                    <div class="message-body">
+                        <ng-container *ngIf="message.isFile; else textMessageContent">
+                            <div *ngIf="isImage(message)" class="message-image-container">
+                                <a [href]="getImageUrl(message)" [download]="message.fileName" target="_blank">
+                                    <img [src]="getImageUrl(message)" 
+                                        [attr.width]="getImageDimensions(message).width"
+                                        [attr.height]="getImageDimensions(message).height"
+                                        alt="Attached image" 
+                                        class="message-image" />
+                                </a>
+                            </div>
+
+                            <div *ngIf="!isImage(message)">
+                                <a href="javascript:void(0)" (click)="downloadFile(message)">
+                                    <i class="fas fa-file-download me-2"></i>{{ message.fileName }}
+                                </a>
+                            </div>
+                        </ng-container>
+                        <ng-template #textMessageContent>
+                            <span class="message-content">{{ decodeMessageContent(message) }}</span>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <div class="message-actions-and-status">
+                    <div class="message-actions">
+                        <button (click)="replyToMessage(message)" class="reply-button btn btn-link btn-sm p-0">
+                            ↩️
+                        </button>
+                        <ng-container *ngIf="message.from === currentUser">
+                            <button (click)="startEditMessage(message)" class="edit-button btn btn-link btn-sm p-0">
+                                ✏️
+                            </button>
+                            <button (click)="confirmDeleteMessage(message.id)" class="delete-button btn btn-link btn-sm p-0">
+                                🗑️
+                            </button>
+                        </ng-container>
+                    </div>
+
+                    <div class="message-status">
+                        <span *ngIf="message.edited" class="edited-indicator">edited</span>
+                        <span class="message-timestamp">{{ message.timestamp | date:'shortTime':'UTC' }}</span>
+                        <ng-container *ngIf="message.from === currentUser">
+                            <ng-container *ngIf="message.status === 'sent'">
+                            <span class="status-dot dot-grey"></span>
+                            </ng-container>
+                            <ng-container *ngIf="message.status === 'delivered'">
+                            <span class="status-dot dot-grey"></span>
+                            <span class="status-dot dot-grey"></span>
+                            </ng-container>
+                            <ng-container *ngIf="message.status === 'read'">
+                            <span class="status-dot dot-blue"></span>
+                            <span class="status-dot dot-blue"></span>
+                            </ng-container>
+                            <ng-container *ngIf="message.status === 'error'">
+                            <span class="status-dot dot-yellow"></span>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

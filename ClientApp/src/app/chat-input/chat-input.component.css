@@ -1,0 +1,25 @@
+/* chat-input.component.css */
+
+/* Стилі для поля вводу */
+.form-control {
+  font-family: 'Postbook', sans-serif; /* Застосувати шрифт Postbook до поля вводу */
+  font-size: 1.1em; /* За бажанням, збільшити розмір шрифту в полі вводу */
+  color: #333; /* Колір тексту, що вводиться */
+  background-color: #f8f9fa; /* Світліший фон для поля вводу */
+  border: 1px solid #ced4da; /* Стандартний Bootstrap колір рамки */
+  padding: 0.5rem 0.75rem; /* Відступи всередині поля */
+  border-radius: 0.25rem; /* Заокруглення кутів */
+}
+
+/* Стилі для placeholder (текст "Send message") */
+.form-control::placeholder {
+  font-family: 'Postbook', sans-serif; /* Застосувати шрифт до placeholder */
+  color: #6c757d; /* Сірий колір для placeholder */
+}
+
+/* Стилі для кнопки Send */
+.btn-block { /* Або більш специфічний селектор, якщо ви використовуєте інший клас */
+  font-family: 'Postbook', sans-serif; /* Застосувати шрифт до кнопки */
+  font-size: 1.1em; /* Розмір шрифту на кнопці */
+  /* інші стилі (колір, фон) залиште від Bootstrap або налаштуйте за потреби */
+}

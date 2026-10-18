@@ -1,0 +1,40 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+[Bb]in/
+[Oo]bj/
+amd64/
+x86/
+
+# Secrets and local configs
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.local.json
+secrets.json
+*.pfx
+Api/appsettings.json
+
+# Angular build output copied into wwwroot
+Api/wwwroot/*.js
+Api/wwwroot/*.js.map
+Api/wwwroot/*.css
+Api/wwwroot/*.css.map
+Api/wwwroot/index.html
+Api/wwwroot/3rdpartylicenses.txt
+
+# Uploads and logs
+Api/wwwroot/uploads/*
+!Api/wwwroot/uploads/.gitkeep
+frontend_logs.txt
+*.log
+*.tmp
+
+# System
+.DS_Store
+Thumbs.db
+

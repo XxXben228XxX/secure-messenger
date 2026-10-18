@@ -1,0 +1,87 @@
+/* src/styles.css */
+
+/* --- Font-Face Declaration --- */
+@font-face {
+  font-family: 'Postbook';
+  src: url('assets/fonts/Postbook.otf') format('opentype'),
+       url('assets/fonts/Postbook.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* --- Global Font Application --- */
+body {
+  font-family: 'Postbook', sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Postbook', cursive;
+}
+
+/* --- Global Layout and Background Styles (ВАЖЛИВО) --- */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto; /* Щоб уникнути загальних смуг прокрутки */
+}
+
+app-infinite-background {
+  position: fixed; /* ✅ Закріплює фон на місці */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* ✅ Забезпечує, що фон знаходиться позаду контенту */
+}
+
+/* ЗМІНИ ТУТ: app-root - головний Flexbox-контейнер */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Гарантує, що app-root займає щонайменше висоту всього вікна */
+  width: 100%;
+  position: relative; /* Щоб app-aurora-background міг позиціонуватися відносно нього */
+  overflow: hidden; /* Можливо, потрібно, щоб обрізати вміст, що виходить за межі app-root */
+}
+
+/* Тепер app-aurora-background як фон для app-root */
+/* Це дозволяє Flexbox правильно розподіляти простір для navbar, main та footer */
+app-aurora-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Фон на задньому плані */
+  pointer-events: none; /* Щоб не блокував кліки */
+}
+
+/* Основний вміст, який розтягується */
+.content-wrapper {
+  flex-grow: 1; /* Ключова властивість: дозволяє розтягуватися */
+  /* overflow-y: auto;  <-- ПЕРЕМІСТІТЬ ЦЕ! */
+  position: relative; /* Для Z-index */
+  z-index: 1; /* Розміщує контент над фоном Aurora */
+  padding: 20px; /* Загальний внутрішній відступ для вмісту */
+  box-sizing: border-box;
+}
+
+/* Стилі для контейнера router-outlet */
+.main-content-container {
+  min-height: 500px; /* Якщо це мінімальна висота для контенту */
+  position: relative;
+  /* Тут може бути overflow-y: auto; якщо саме цей блок має скролитися */
+  /* overflow-y: auto; */
+}
+
+/* Стилі для карток та кнопок, якщо вони глобальні */
+.card {
+  background-color: #ffffff;
+}
+.card-header, .card-footer {
+  background-color: #f8f9fa;
+}

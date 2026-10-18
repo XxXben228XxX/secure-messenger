@@ -1,0 +1,134 @@
+<div class="row">
+    <div class="col-lg-2">
+        <div class="d-grid">
+            <button class="btn btn-primary btn-block" type="button" (click)="backToHome()">Back to home</button>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="chatConnectionError" class="alert alert-danger mt-3" role="alert">
+    <strong>Connection Error:</strong> {{ chatConnectionError }}
+    <p class="mt-2">Please check your internet connection or try to log in again.</p>
+</div>
+
+<div class="row mt-3" *ngIf="!chatConnectionError">
+    <div class="col-lg-2">
+        <div class="card border-secondary mb-3">
+            <div class="card-header h3 text-muted text-center">Online Users</div>
+            <div class="card-body" style="min-height: 467px;">
+                <div class="row mt-1" *ngFor="let user of filteredUsers; trackBy: trackByUser">
+                    <div class="col">
+                        <div class="d-grid">
+                            <button type="button" class="btn card-text btn-block"
+                                [ngClass]="{'btn-success' : user === chatService.myName, 'btn-dark': user !== chatService.myName}"
+                                (dblclick)="openPrivateChat(user)" [disabled]="user === chatService.myName">
+                                {{ user }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <input type="text" 
+                       class="form-control" 
+                       placeholder="Search users..." 
+                       [(ngModel)]="searchQuery"
+                       (ngModelChange)="filterUsers()">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="card border-secondary message-card">
+            <div class="card-header h3 text-muted text-center">Messages</div>
+            
+            <!-- ✅ WRAPPER з position: relative для кнопки -->
+            <div style="position: relative;">
+                <div class="card-body message-body messages-scroll-container" 
+                    style="height: 500px; overflow-y: auto; overflow-x: hidden;">
+                    <app-messages
+                        [messages]="messages"
+                        [currentUser]="chatService.myName"
+                        (reply)="onReply($event)"
+                        (edit)="onEdit($event)"
+                        (delete)="onDelete($event)"
+                        (read)="onMessageRead($event)">
+                    </app-messages>
+                    <div class="scroll-down-button-wrapper">
+                        <button 
+                            class="scroll-down-button"
+                            (click)="scrollToLatestMessage()"
+                            type="button"
+                            title="Scroll to latest messages"
+                            [class.visible]="showScrollButton">
+                            ↓
+                        </button>
+                    </div>
+                </div>                
+            </div>
+            
+            <div class="card-footer">
+                <div *ngIf="replyingToMessage" class="reply-preview">
+                    <span class="reply-preview-text">Reply: {{ replyingToMessage.from }}: </span>
+                    <span class="reply-preview-content">{{ replyingToMessage.content }}</span>
+                    <button (click)="cancelReply()" class="cancel-reply-button">x</button>
+                </div>
+                
+                <div *ngIf="selectedFile" class="file-preview-container">
+                    <div class="file-preview-wrapper">
+                        <ng-container *ngIf="previewUrl">
+                            <img [src]="previewUrl" alt="File preview" class="file-preview-image">
+                        </ng-container>
+                        <ng-container *ngIf="!previewUrl">
+                            <i class="bi bi-file-earmark-fill" style="font-size: 2em; margin-right: 8px;"></i>
+                        </ng-container>
+                        <span>{{ selectedFileName }}</span>
+                    </div>
+                    <span 
+                        (click)="cancelFileSelection()" 
+                        title="Відмінити"
+                        style="cursor: pointer; color: #6c757d; font-size: 20px; line-height: 1;"
+                        onmouseover="this.style.color='#dc3545'" 
+                        onmouseout="this.style.color='#6c757d'">
+                        ✕
+                    </span>
+                </div>
+                
+                <div class="input-group">
+                    <input type="text"
+                        class="form-control"
+                        placeholder="Write a message..."
+                        [(ngModel)]="newMessageContent"
+                        (keyup.enter)="sendNewMessage()">
+
+                    <input type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
+
+                    <div class="input-group-append d-flex align-items-center">
+                        <button class="animated-button-container" (click)="fileInput.click()">
+                            <span class="background-circle"></span>
+                            <span class="wave-left">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-auto h-full opacity-100 object-stretch" viewBox="0 0 487 487">
+                                    <path fill-opacity=".1" fill-rule="nonzero" fill="#FFF" d="M0 .3c67 2.1 134.1 4.3 186.3 37 52.2 32.7 89.6 95.8 112.8 150.6 23.2 54.8 32.3 101.4 61.2 149.9 28.9 48.4 77.7 98.8 126.4 149.2H0V.3z"></path>
+                                </svg>
+                            </span>
+                            <span class="wave-right">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="object-cover w-full h-full" viewBox="0 0 487 487">
+                                    <path fill-opacity=".1" fill-rule="nonzero" fill="#FFF" d="M487 486.7c-66.1-3.6-132.3-7.3-186.3-37s-95.9-85.3-126.2-137.2c-30.4-51.8-49.3-99.9-76.5-151.4C70.9 109.6 35.6 54.8.3 0H487v486.7z"></path>
+                                </svg>
+                            </span>
+                            <span class="gradient-overlay"></span>
+                            <span class="button-text"><i class="bi bi-paperclip"></i> Attach file</span>
+                        </button>
+
+                        <button class="send-button" 
+                                type="button" 
+                                [disabled]="!newMessageContent && !selectedFile" 
+                                (click)="sendNewMessage()">
+                            <span>Send</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,83 @@
+/* infinite-background.component.css */
+
+.infinite-scroll-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    overscroll-behavior: none;
+    z-index: -1;
+    background-color: #060010; /* Темний фон */
+}
+
+/* Градієнтні "маски" для плавного зникнення/появи */
+.infinite-scroll-wrapper::before,
+.infinite-scroll-wrapper::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Градієнт для верхнього лівого кута (зникнення) */
+.infinite-scroll-wrapper::before {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top left, transparent 60%, rgba(6, 0, 16, 0.9) 100%);
+}
+
+/* Градієнт для нижнього правого кута (поява) */
+.infinite-scroll-wrapper::after {
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom right, transparent 60%, rgba(6, 0, 16, 0.9) 100%);
+}
+
+.infinite-scroll-container {
+    display: flex;
+    flex-direction: column; /* Хоча GSAP буде керувати позицією, flex-direction може впливати на початковий рендер */
+    overscroll-behavior: contain;
+    padding-inline: 1rem;
+    cursor: grab;
+    transform-style: preserve-3d; /* ДУЖЕ ВАЖЛИВО для коректних 3D-трансформацій дочірніх елементів */
+    perspective: 1000px; /* <--- Тепер тут */
+    transform-origin: center center;
+    height: 100%; /* Займаємо всю висоту wrapper */
+    width: 100%; /* Займаємо всю ширину wrapper */
+    position: relative; /* Батьківський для абсолютно позиціонованих елементів */
+}
+
+.infinite-scroll-item {
+    --accent-color: #ffffff;
+    border-radius: 15px;
+    display: flex; /* Залишаємо flex для центрування контенту всередині картки */
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    border: 2px solid var(--accent-color);
+    user-select: none;
+    box-sizing: border-box;
+    color: var(--accent-color);
+    background-color: rgba(255, 255, 255, 0.2); /* Збільшив прозорість для кращої видимості */
+
+    /* ОБОВ'ЯЗКОВІ ВЛАСТИВОСТІ ДЛЯ РОБОТИ GSAP */
+    position: absolute; /* Позиціонування за допомогою GSAP X/Y */
+    margin-top: 0; /* Видаляємо, бо GSAP керує позицією */
+
+    /* ТИМЧАСОВО ДЛЯ ВІДЛАГОДЖЕННЯ - ЗРОБІТЬ КАРТКИ ЗАВЖДИ ВИДИМИМИ */
+    opacity: 1; /* Перевизначте opacity з JS, щоб завжди було видно */
+    visibility: visible; /* Переконайтесь, що не приховано */
+    pointer-events: auto !important; /* Переконайтесь, що не ігнорує події */
+}
